@@ -3,7 +3,7 @@ defmodule River.WorkflowEngine.Steps.PresentPage do
   alias River.WorkflowEngine.Commands.UICommand
 
   @impl River.WorkflowEngine.Step
-  def handle(%{"config" => %{"uri" => uri}}, _event, _workflow_session) do
+  def run(%{"config" => %{"uri" => uri}}, _event, _workflow_session) do
     command = %UICommand{
       kind: "system/pages/present",
       data: %{"uri" => uri}

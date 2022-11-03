@@ -3,7 +3,7 @@ defmodule River.WorkflowEngine.Steps.ProcessForm.Test do
 
   import River.Factory
 
-  describe "handle/2" do
+  describe "run/2" do
     setup do
       workflow_session = insert(:workflow_session)
 
@@ -25,7 +25,7 @@ defmodule River.WorkflowEngine.Steps.ProcessForm.Test do
       event: event,
       workflow_session: workflow_session
     } do
-      assert River.WorkflowEngine.Steps.ProcessForm.handle(step, event, workflow_session) ==
+      assert River.WorkflowEngine.Steps.ProcessForm.run(step, event, workflow_session) ==
                [
                  %River.WorkflowEngine.Commands.NextEventCommand{
                    event: %{"key" => "events/333"}
@@ -38,7 +38,7 @@ defmodule River.WorkflowEngine.Steps.ProcessForm.Test do
       event: event,
       workflow_session: workflow_session
     } do
-      River.WorkflowEngine.Steps.ProcessForm.handle(step, event, workflow_session)
+      River.WorkflowEngine.Steps.ProcessForm.run(step, event, workflow_session)
       workflow_session = Repo.reload(workflow_session)
 
       assert workflow_session.data == %{

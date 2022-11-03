@@ -5,7 +5,7 @@ defmodule River.WorkflowEngine.Steps.Redirect.Test do
   alias River.WorkflowEngine.Steps.Redirect
   alias River.WorkflowEngine.Commands.UICommand
 
-  describe "handle/2" do
+  describe "run/2" do
     setup do
       workflow_session = insert(:workflow_session)
 
@@ -26,7 +26,7 @@ defmodule River.WorkflowEngine.Steps.Redirect.Test do
       event: event,
       workflow_session: workflow_session
     } do
-      assert Redirect.handle(step, event, workflow_session) == [
+      assert Redirect.run(step, event, workflow_session) == [
                %UICommand{
                  kind: "system/ui/redirect",
                  data: %{"url" => "https://www.google.com"}

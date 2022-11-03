@@ -5,7 +5,7 @@ defmodule River.WorkflowEngine.Steps.ProcessForm do
   alias River.Workflows
 
   @impl River.WorkflowEngine.Step
-  def handle(step, event, workflow_session) do
+  def run(step, event, workflow_session) do
     session_data = Map.put(workflow_session.data, step["key"], event["data"])
 
     case Workflows.update_workflow_session(workflow_session, %{data: session_data}) do

@@ -3,7 +3,7 @@ defmodule River.WorkflowEngine.Steps.Stop do
   alias River.WorkflowEngine.Commands.StopCommand
 
   @impl River.WorkflowEngine.Step
-  def handle(_step, event, _workflow_session) do
+  def run(_step, event, _workflow_session) do
     [%StopCommand{event: event}]
   end
 end

@@ -3,7 +3,7 @@ defmodule River.WorkflowEngine.Steps.Conditional do
   alias River.WorkflowEngine.Commands.NextEventCommand
 
   @impl River.WorkflowEngine.Step
-  def handle(%{"config" => config, "needs" => needs}, event, workflow_session) do
+  def run(%{"config" => config, "needs" => needs}, event, workflow_session) do
     data = build_data(event, workflow_session, needs)
     # evaluate the cases and first match wins
 

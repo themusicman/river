@@ -27,7 +27,7 @@ defmodule River.WorkflowEngine.Steps do
 
   def run(step, event, workflow_session) do
     impl = get_impl_for_key(step["key"])
-    impl.handle(step, event, workflow_session)
+    impl.run(step, event, workflow_session)
   end
 
   def get_impl_for_key("system/steps/present_form/" <> _id),

@@ -5,7 +5,7 @@ defmodule River.WorkflowEngine.Steps.PresentForm.Test do
   alias River.WorkflowEngine.Steps.PresentForm
   alias River.WorkflowEngine.Commands.UICommand
 
-  describe "handle/2" do
+  describe "run/2" do
     setup do
       workflow_session = insert(:workflow_session)
 
@@ -26,7 +26,7 @@ defmodule River.WorkflowEngine.Steps.PresentForm.Test do
       event: event,
       workflow_session: workflow_session
     } do
-      assert PresentForm.handle(step, event, workflow_session) == [
+      assert PresentForm.run(step, event, workflow_session) == [
                %UICommand{
                  kind: "system/forms/present",
                  data: %{"form" => %{"emits" => "events/333"}, "uri" => "/form"}

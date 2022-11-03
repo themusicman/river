@@ -3,7 +3,7 @@ defmodule River.WorkflowEngine.Steps.PresentForm do
   alias River.WorkflowEngine.Commands.UICommand
 
   @impl River.WorkflowEngine.Step
-  def handle(%{"config" => %{"form" => form, "uri" => uri}}, _event, _workflow_session) do
+  def run(%{"config" => %{"form" => form, "uri" => uri}}, _event, _workflow_session) do
     command = %UICommand{
       kind: "system/forms/present",
       data: %{

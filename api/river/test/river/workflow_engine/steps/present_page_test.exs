@@ -5,7 +5,7 @@ defmodule River.WorkflowEngine.Steps.PresentPage.Test do
   alias River.WorkflowEngine.Steps.PresentPage
   alias River.WorkflowEngine.Commands.UICommand
 
-  describe "handle/2" do
+  describe "run/2" do
     setup do
       workflow_session = insert(:workflow_session)
 
@@ -26,7 +26,7 @@ defmodule River.WorkflowEngine.Steps.PresentPage.Test do
       event: event,
       workflow_session: workflow_session
     } do
-      assert PresentPage.handle(step, event, workflow_session) == [
+      assert PresentPage.run(step, event, workflow_session) == [
                %UICommand{
                  kind: "system/pages/present",
                  data: %{"uri" => "/page-1"}

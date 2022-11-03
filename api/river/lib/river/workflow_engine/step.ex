@@ -14,7 +14,7 @@ defmodule River.WorkflowEngine.Step do
   """
   @type event :: map()
 
-  @callback handle(step(), event(), WorkflowSession.t()) :: [
+  @callback run(step(), event(), WorkflowSession.t()) :: [
               UICommand.t()
               | NextEventCommand.t()
               | StopCommand.t()

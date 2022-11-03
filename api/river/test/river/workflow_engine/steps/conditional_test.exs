@@ -14,7 +14,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
     end
   end
 
-  describe "handle/2" do
+  describe "run/2" do
     setup do
       workflow_session = insert(:workflow_session)
 
@@ -52,7 +52,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
         "needs" => [%{"key" => "system/steps/process_form/1", "as" => "form_one"}]
       }
 
-      assert River.WorkflowEngine.Steps.Conditional.handle(step, event, workflow_session) ==
+      assert River.WorkflowEngine.Steps.Conditional.run(step, event, workflow_session) ==
                [
                  %River.WorkflowEngine.Commands.NextEventCommand{
                    event: %{
@@ -98,7 +98,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
         "needs" => [%{"key" => "system/steps/process_form/1", "as" => "form_one"}]
       }
 
-      assert River.WorkflowEngine.Steps.Conditional.handle(step, event, workflow_session) ==
+      assert River.WorkflowEngine.Steps.Conditional.run(step, event, workflow_session) ==
                [
                  %River.WorkflowEngine.Commands.NextEventCommand{
                    event: %{

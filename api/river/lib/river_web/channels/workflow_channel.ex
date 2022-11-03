@@ -30,7 +30,7 @@ defmodule RiverWeb.WorkflowChannel do
     workflow_session = socket.assigns.workflow_session
 
     River.WorkflowEngine.handle_event(workflow_session.workflow, event, workflow_session)
-    |> River.Workflows.handle_commands(workflow_session)
+    |> River.WorkflowEngine.handle_commands(workflow_session)
 
     {:reply, {:ok, %{"success" => true}}, socket}
   end

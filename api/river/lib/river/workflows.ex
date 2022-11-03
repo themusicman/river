@@ -5,12 +5,7 @@ defmodule River.Workflows do
 
   import Ecto.Query, warn: false
   alias River.Repo
-  alias River.WorkflowEngine.Commands.Command
   alias River.Workflows.{Workflow, Token, WorkflowSession}
-
-  def handle_commands(commands, workflow_session) do
-    Enum.map(commands, &Command.execute(&1, workflow_session))
-  end
 
   def from_workflows() do
     from(w in Workflow, as: :workflows)
