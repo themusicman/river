@@ -1,0 +1,8 @@
+.elixir_ls
+.git
+.github
+_build
+deps
+
+# Ignore notes
+notes.txt

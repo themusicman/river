@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+  db:
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+    image: postgres:14.2-bullseye
+    restart: always
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  river:
+    build:
+      context: ./api/river/
+      dockerfile: Dockerfile.dev
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./api/river:/app
+    depends_on:
+      - db
+    env_file:
+      - ./api/river/.env
+    environment:
+      DATABASE_URL: postgres://postgres@db:5432/river_dev
+      MIX_ENV: dev
+      BASIC_AUTH_KEY: basic_auth_key
+      BASIC_AUTH_SECRET: basic_auth_secret
+    command: bash -c "mix phx.server"
+
+  ui:
+    build:
+      context: ./frontend/ui
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - river
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend/ui:/app
+    environment:
+      DEV_SERVER_HOST: 0.0.0.0
+
+volumes:
+  dbdata:
+    driver: local
+
