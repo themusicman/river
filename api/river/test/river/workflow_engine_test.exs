@@ -2,6 +2,8 @@ defmodule River.WorkflowEngine.Test do
   use River.DataCase
 
   import River.Factory
+  alias River.WorkflowEngine
+  alias River.WorkflowEngine.Commands.{UICommand, StopCommand}
 
   describe "handle_event/2" do
     setup do
@@ -10,13 +12,15 @@ defmodule River.WorkflowEngine.Test do
         "steps" => [
           %{
             "label" => "Present Form",
-            "key" => "system/steps/present_form/1",
+            "key" => "system/steps/show_page/1",
             "on" => "events/123",
             "config" => %{
-              "uri" => "/form",
-              "form" => %{
-                "emits" => "events/456",
-                "schema" => %{}
+              "page" => %{
+                "uri" => "/form",
+                "form" => %{
+                  "emits" => "events/456",
+                  "schema" => %{}
+                }
               }
             }
           },
@@ -48,12 +52,17 @@ defmodule River.WorkflowEngine.Test do
     } do
       event = %{"key" => "events/123"}
 
-      assert River.WorkflowEngine.handle_event(workflow, event, workflow_session) == [
-               %River.WorkflowEngine.Commands.UICommand{
-                 data: %{"uri" => "/form", "form" => %{"emits" => "events/456", "schema" => %{}}},
-                 kind: "system/forms/present"
+      assert WorkflowEngine.handle_event(workflow, event, workflow_session) == [
+               %UICommand{
+                 data: %{
+                   "page" => %{
+                     "uri" => "/form",
+                     "form" => %{"emits" => "events/456", "schema" => %{}}
+                   }
+                 },
+                 kind: "system/pages/show"
                },
-               %River.WorkflowEngine.Commands.StopCommand{event: %{"key" => "events/123"}}
+               %StopCommand{event: %{"key" => "events/123"}}
              ]
     end
   end

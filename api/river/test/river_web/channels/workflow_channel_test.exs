@@ -3,6 +3,7 @@ defmodule RiverWeb.WorkflowChannelTest do
   import River.Factory
   import Mox
   alias River.WorkflowsFixtures
+  alias River.WorkflowEngine.Commands.UICommand
 
   setup :verify_on_exit!
 
@@ -32,12 +33,31 @@ defmodule RiverWeb.WorkflowChannelTest do
       assert_reply ref, :ok, %{"success" => true}
 
       assert_broadcast "command",
-                       %River.WorkflowEngine.Commands.UICommand{
+                       %UICommand{
                          data: %{
-                           "uri" => "/form",
-                           "form" => %{"emits" => "events/456", "schema" => %{}}
+                           "page" => %{
+                             "uri" => "/form",
+                             "form" => %{"emits" => "events/456", "schema" => %{}}
+                           }
                          },
-                         kind: "system/forms/present"
+                         kind: "system/pages/show"
+                       }
+    end
+
+    test "request page configuration for uri", %{socket: socket} do
+      event = %{"uri" => "/form"}
+      ref = push(socket, "request_page", event)
+      assert_reply ref, :ok, %{"success" => true}
+
+      assert_broadcast "command",
+                       %UICommand{
+                         data: %{
+                           "page" => %{
+                             "uri" => "/form",
+                             "form" => %{"emits" => "events/456", "schema" => %{}}
+                           }
+                         },
+                         kind: "system/pages/show"
                        }
     end
   end

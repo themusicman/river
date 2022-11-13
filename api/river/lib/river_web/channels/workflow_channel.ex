@@ -2,6 +2,8 @@ defmodule RiverWeb.WorkflowChannel do
   use RiverWeb, :channel
 
   alias River.Repo
+  alias River.WorkflowEngine.Steps
+  alias River.WorkflowEngine.Steps.ShowPage
 
   @impl true
   def join("workflow:" <> workflow_session_id, payload, socket) do
@@ -23,14 +25,26 @@ defmodule RiverWeb.WorkflowChannel do
     end
   end
 
-  # Channels can be used in a request/response fashion
-  # by sending replies to requests from the client
   @impl true
   def handle_in("trigger_event", event, socket) do
     workflow_session = socket.assigns.workflow_session
 
     River.WorkflowEngine.handle_event(workflow_session.workflow, event, workflow_session)
-    |> River.WorkflowEngine.handle_commands(workflow_session)
+    |> River.WorkflowEngine.execute_commands(workflow_session)
+
+    {:reply, {:ok, %{"success" => true}}, socket}
+  end
+
+  @impl true
+  def handle_in("request_page", event, socket) do
+    workflow_session = socket.assigns.workflow_session
+
+    step = Steps.find_step_with_uri(workflow_session.workflow, event["uri"])
+
+    if step do
+      [ShowPage.build_ui_command(get_in(step, ["config", "page"]))]
+      |> River.WorkflowEngine.execute_commands(workflow_session)
+    end
 
     {:reply, {:ok, %{"success" => true}}, socket}
   end

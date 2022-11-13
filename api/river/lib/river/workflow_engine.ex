@@ -12,7 +12,7 @@ defmodule River.WorkflowEngine do
     |> List.flatten()
   end
 
-  def handle_commands(commands, workflow_session) do
+  def execute_commands(commands, workflow_session) do
     Enum.map(commands, &Command.execute(&1, workflow_session))
   end
 end

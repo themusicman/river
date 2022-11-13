@@ -10,13 +10,15 @@ Workflows are defined via JSON configuration
   "steps": [
     {
       "label": "present form",
-      "key": "system/steps/present_form/1",
+      "key": "system/steps/show_page/1",
       "on": "events/123",
       "config": {
-        "form": {
+        "page": {
           "uri": "/form",
-          "emits": "events/765",
-          "schema": {}
+          "form": {
+            "emits": "events/765",
+            "schema": {}
+          }
         }
       }
     },
@@ -55,3 +57,4 @@ Event that triggers the process form step:
 
 - [ ] Build Workflow UI (Vue SPA)
 - [ ] Build Workflow Builder UI (LiveView)
+- [ ] Add workflow schema validation

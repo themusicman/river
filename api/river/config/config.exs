@@ -55,7 +55,7 @@ config :river, :jwt_secret, "TkPl4CbRRoHiyVWUN9T8WU3Ymbu39aNpsH3OWi/rxYQoSh06OuE
 
 # Mocks
 config :river, :jwt, RiverWeb.JWT.Token
-config :river, :present_form, River.WorkflowEngine.Steps.PresentForm
+config :river, :show_page, River.WorkflowEngine.Steps.ShowPage
 config :river, :process_form, River.WorkflowEngine.Steps.ProcessForm
 config :river, :redirect, River.WorkflowEngine.Steps.Redirect
 config :river, :stop, River.WorkflowEngine.Steps.Stop

@@ -5,8 +5,8 @@ defmodule River.WorkflowEngine.Steps.Conditional do
   @impl River.WorkflowEngine.Step
   def run(%{"config" => config, "needs" => needs}, event, workflow_session) do
     data = build_data(event, workflow_session, needs)
-    # evaluate the cases and first match wins
 
+    # evaluate the cases and first match wins
     match =
       Map.get(config, "conditions", [])
       |> Enum.find(nil, &evaluate_condition(&1, data))

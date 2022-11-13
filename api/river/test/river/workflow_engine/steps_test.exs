@@ -14,6 +14,32 @@ defmodule River.WorkflowEngine.Steps.Test do
     {:ok, workflow: workflow, workflow_session: workflow_session}
   end
 
+  describe "find_step_with_uri/2" do
+    test "returns the step that has a uri", %{workflow: workflow} do
+      uri = "/form"
+
+      assert Steps.find_step_with_uri(workflow, uri) == %{
+               "config" => %{
+                 "page" => %{
+                   "description" => "This is my form",
+                   "form" => %{"emits" => "events/456", "schema" => %{}},
+                   "title" => "My Form",
+                   "uri" => "/form"
+                 }
+               },
+               "key" => "system/steps/show_page/1",
+               "label" => "Present Form",
+               "on" => "events/123"
+             }
+    end
+
+    test "returns nil if there is no step with that uri", %{workflow: workflow} do
+      uri = "/form1"
+
+      assert Steps.find_step_with_uri(workflow, uri) == nil
+    end
+  end
+
   describe "get_all_for_event/2" do
     test "returns all steps for an event", %{workflow: workflow} do
       event = %{"key" => "events/123"}
@@ -36,10 +62,10 @@ defmodule River.WorkflowEngine.Steps.Test do
 
     test "returns event for a form" do
       step = %{
-        "label" => "Present Form",
-        "key" => "system/steps/present_form/1",
+        "label" => "Show Form",
+        "key" => "system/steps/show_page/1",
         "on" => "events/222",
-        "config" => %{"uri" => "/form", "form" => %{"emits" => "events/333"}}
+        "config" => %{"page" => %{"uri" => "/form", "form" => %{"emits" => "events/333"}}}
       }
 
       assert Steps.event_from_step(step) == "events/333"
@@ -47,27 +73,27 @@ defmodule River.WorkflowEngine.Steps.Test do
   end
 
   describe "run/2" do
-    test "executes the a present form step and returns a ui command", %{
+    test "executes the a show form step and returns a ui command", %{
       workflow_session: workflow_session
     } do
       step = %{
-        "label" => "Present Form",
-        "key" => "system/steps/present_form/1",
+        "label" => "Show Form",
+        "key" => "system/steps/show_page/1",
         "on" => "events/222",
-        "config" => %{"form" => %{"emits" => "events/333"}, "uri" => "/form"}
+        "config" => %{"page" => %{"form" => %{"emits" => "events/333"}, "uri" => "/form"}}
       }
 
       event = %{"key" => "events/222"}
 
       assert Steps.run(step, event, workflow_session) == [
                %UICommand{
-                 data: %{"form" => %{"emits" => "events/333"}, "uri" => "/form"},
-                 kind: "system/forms/present"
+                 data: %{"page" => %{"form" => %{"emits" => "events/333"}, "uri" => "/form"}},
+                 kind: "system/pages/show"
                }
              ]
     end
 
-    test "executes the a present form step and returns an event", %{
+    test "executes the a show form step and returns an event", %{
       workflow_session: workflow_session
     } do
       step = %{

@@ -1,6 +1,6 @@
 defmodule River.WorkflowEngine.Commands.UICommand do
   @moduledoc """
-  A command to present a UI to the user.
+  A command to show a UI to the user.
   """
   @enforce_keys [:kind, :data]
   defstruct kind: "", data: %{}

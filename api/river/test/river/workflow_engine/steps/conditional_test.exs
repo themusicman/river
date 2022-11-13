@@ -3,6 +3,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
 
   import River.Factory
   alias River.WorkflowEngine.Steps.Conditional
+  alias River.WorkflowEngine.Commands.NextEventCommand
 
   describe "get_value/2" do
     test "returns itself if no path given" do
@@ -52,9 +53,9 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
         "needs" => [%{"key" => "system/steps/process_form/1", "as" => "form_one"}]
       }
 
-      assert River.WorkflowEngine.Steps.Conditional.run(step, event, workflow_session) ==
+      assert Conditional.run(step, event, workflow_session) ==
                [
-                 %River.WorkflowEngine.Commands.NextEventCommand{
+                 %NextEventCommand{
                    event: %{
                      "key" => "events/333",
                      "data" => %{
@@ -98,9 +99,9 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
         "needs" => [%{"key" => "system/steps/process_form/1", "as" => "form_one"}]
       }
 
-      assert River.WorkflowEngine.Steps.Conditional.run(step, event, workflow_session) ==
+      assert Conditional.run(step, event, workflow_session) ==
                [
-                 %River.WorkflowEngine.Commands.NextEventCommand{
+                 %NextEventCommand{
                    event: %{
                      "key" => "events/555",
                      "data" => %{

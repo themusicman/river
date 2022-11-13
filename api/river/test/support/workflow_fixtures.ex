@@ -5,13 +5,17 @@ defmodule River.WorkflowsFixtures do
       "steps" => [
         %{
           "label" => "Present Form",
-          "key" => "system/steps/present_form/1",
+          "key" => "system/steps/show_page/1",
           "on" => "events/123",
           "config" => %{
-            "uri" => "/form",
-            "form" => %{
-              "emits" => "events/456",
-              "schema" => %{}
+            "page" => %{
+              "uri" => "/form",
+              "title" => "My Form",
+              "description" => "This is my form",
+              "form" => %{
+                "emits" => "events/456",
+                "schema" => %{}
+              }
             }
           }
         },
@@ -23,10 +27,27 @@ defmodule River.WorkflowsFixtures do
           "emits" => "events/789"
         },
         %{
+          "label" => "Redirect or Show Thank You Page",
+          "key" => "system/steps/conditional/3",
+          "on" => "events/789",
+          "config" => %{}
+        },
+        %{
           "label" => "Redirect User",
           "key" => "system/steps/redirect/3",
           "on" => "events/789",
           "config" => %{"url" => "https://www.google.com"}
+        },
+        %{
+          "label" => "Show Thank You Page",
+          "key" => "system/steps/show_page/1",
+          "on" => "events/777",
+          "config" => %{
+            "page" => %{
+              "uri" => "/thank-you",
+              "thank_you_message" => "Thank you for your submission"
+            }
+          }
         }
       ]
     }

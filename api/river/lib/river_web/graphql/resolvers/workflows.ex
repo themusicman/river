@@ -45,7 +45,7 @@ defmodule RiverWeb.Graphql.Resolvers.Workflows do
 
       _result =
         WorkflowEngine.handle_event(workflow, event, workflow_session)
-        |> WorkflowEngine.handle_commands(workflow_session)
+        |> WorkflowEngine.execute_commands(workflow_session)
 
       # Probably should return the results of the handle_event function
       Mutation.success(workflow_session)

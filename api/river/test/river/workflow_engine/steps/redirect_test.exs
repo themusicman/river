@@ -21,7 +21,7 @@ defmodule River.WorkflowEngine.Steps.Redirect.Test do
       {:ok, step: step, event: event, workflow_session: workflow_session}
     end
 
-    test "returns a ui command to present the form", %{
+    test "returns a ui command to show the form", %{
       step: step,
       event: event,
       workflow_session: workflow_session
