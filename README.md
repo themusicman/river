@@ -9,34 +9,39 @@ Workflows are defined via JSON configuration
   "key": "workflows/123",
   "steps": [
     {
-      "label": "present form",
-      "key": "system/steps/show_page/1",
+      "label": "Onboarding form",
+      "key": "river/steps/show_page/1",
       "on": "events/123",
-      "config": {
-        "page": {
-          "uri": "/form",
-          "form": {
-            "emits": "events/765",
-            "schema": {}
-          }
+      "sequence": "onboarding",
+      "position": 1,
+      "page": {
+        "slug": "form",
+        "form": {
+          "emits": "events/765",
+          "schema": {}
         }
-      }
+      },
+      "config": {}
     },
     {
-      "label": "process form",
-      "key": "system/steps/process_form/1",
+      "label": "Process onboarding form",
+      "key": "river/steps/process_form/1",
+      "sequence": "onboarding",
+      "position": 2,
       "on": "events/765",
       "config": {},
       "emits": "events/777"
     },
     {
       "label": "send sms",
-      "key": "system/steps/send_sms",
+      "key": "river/steps/send_sms",
       "on": "events/777",
       "config": {
-        "template": "thanks, {{user.first_name}}"
+        "template": "thanks, {{onboarding_form.user.first_name}}"
       },
-      "needs": [{ "key": "system/steps/process_form/1", "as": "form_1" }] // provides data from another step to this step
+      "needs": [
+        { "key": "river/steps/process_form/1", "as": "onboarding_form" }
+      ]
     }
   ]
 }
@@ -58,3 +63,5 @@ Event that triggers the process form step:
 - [ ] Build Workflow UI (Vue SPA)
 - [ ] Build Workflow Builder UI (LiveView)
 - [ ] Add workflow schema validation
+- [ ] Add workflow slug
+- [ ] Add web hooks

@@ -1,4 +1,4 @@
-defmodule River.WorkflowEngine.Steps.Conditional do
+defmodule River.Steps.Conditional do
   @behaviour River.WorkflowEngine.Step
   alias River.WorkflowEngine.Commands.NextEventCommand
 

@@ -1,4 +1,4 @@
-defmodule River.WorkflowEngine.Steps.Stop do
+defmodule River.Steps.Stop do
   @behaviour River.WorkflowEngine.Step
   alias River.WorkflowEngine.Commands.StopCommand
 

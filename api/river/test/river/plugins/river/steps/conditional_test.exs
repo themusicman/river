@@ -1,8 +1,8 @@
-defmodule River.WorkflowEngine.Steps.Conditional.Test do
+defmodule River.Steps.Conditional.Test do
   use River.DataCase
 
   import River.Factory
-  alias River.WorkflowEngine.Steps.Conditional
+  alias River.Steps.Conditional
   alias River.WorkflowEngine.Commands.NextEventCommand
 
   describe "get_value/2" do
@@ -29,7 +29,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
 
       step = %{
         "label" => "Conditional Logic",
-        "key" => "system/steps/conditional/1",
+        "key" => "river/steps/conditional/1",
         "on" => "events/222",
         "config" => %{
           "conditions" => [
@@ -50,7 +50,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
             }
           ]
         },
-        "needs" => [%{"key" => "system/steps/process_form/1", "as" => "form_one"}]
+        "needs" => [%{"key" => "river/steps/process_form/1", "as" => "form_one"}]
       }
 
       assert Conditional.run(step, event, workflow_session) ==
@@ -76,7 +76,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
 
       step = %{
         "label" => "Conditional Logic",
-        "key" => "system/steps/conditional/1",
+        "key" => "river/steps/conditional/1",
         "on" => "events/222",
         "config" => %{
           "conditions" => [
@@ -96,7 +96,7 @@ defmodule River.WorkflowEngine.Steps.Conditional.Test do
             }
           ]
         },
-        "needs" => [%{"key" => "system/steps/process_form/1", "as" => "form_one"}]
+        "needs" => [%{"key" => "river/steps/process_form/1", "as" => "form_one"}]
       }
 
       assert Conditional.run(step, event, workflow_session) ==

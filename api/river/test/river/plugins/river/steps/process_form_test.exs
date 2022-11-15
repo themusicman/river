@@ -1,7 +1,9 @@
-defmodule River.WorkflowEngine.Steps.ProcessForm.Test do
+defmodule River.Steps.ProcessForm.Test do
   use River.DataCase
 
   import River.Factory
+  alias River.Steps.ProcessForm
+  alias River.WorkflowEngine.Commands.NextEventCommand
 
   describe "run/2" do
     setup do
@@ -9,7 +11,7 @@ defmodule River.WorkflowEngine.Steps.ProcessForm.Test do
 
       step = %{
         "label" => "Process Form",
-        "key" => "system/steps/process_form/1",
+        "key" => "river/steps/process_form/1",
         "on" => "events/222",
         "config" => %{},
         "emits" => "events/333"
@@ -25,9 +27,9 @@ defmodule River.WorkflowEngine.Steps.ProcessForm.Test do
       event: event,
       workflow_session: workflow_session
     } do
-      assert River.WorkflowEngine.Steps.ProcessForm.run(step, event, workflow_session) ==
+      assert ProcessForm.run(step, event, workflow_session) ==
                [
-                 %River.WorkflowEngine.Commands.NextEventCommand{
+                 %NextEventCommand{
                    event: %{"key" => "events/333"}
                  }
                ]
@@ -38,11 +40,11 @@ defmodule River.WorkflowEngine.Steps.ProcessForm.Test do
       event: event,
       workflow_session: workflow_session
     } do
-      River.WorkflowEngine.Steps.ProcessForm.run(step, event, workflow_session)
+      ProcessForm.run(step, event, workflow_session)
       workflow_session = Repo.reload(workflow_session)
 
       assert workflow_session.data == %{
-               "system/steps/process_form/1" => %{"first_name" => "John", "last_name" => "Doe"}
+               "river/steps/process_form/1" => %{"first_name" => "John", "last_name" => "Doe"}
              }
     end
   end

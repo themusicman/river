@@ -1,4 +1,4 @@
-defmodule River.WorkflowEngine.Steps.ProcessForm do
+defmodule River.Steps.ProcessForm do
   @behaviour River.WorkflowEngine.Step
   alias River.WorkflowEngine.Steps
   alias River.WorkflowEngine.Commands.{UICommand, NextEventCommand}
@@ -16,7 +16,7 @@ defmodule River.WorkflowEngine.Steps.ProcessForm do
       {:error, _changeset} ->
         [
           %UICommand{
-            kind: "system/ui/toast",
+            kind: "river/ui/toast",
             data: %{
               "message" => "Error saving form data",
               "type" => "error"

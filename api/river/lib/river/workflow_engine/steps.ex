@@ -7,7 +7,13 @@ defmodule River.WorkflowEngine.Steps do
     workflow.document
     |> get_in(["steps"])
     |> Enum.filter(fn step ->
-      get_in(step, ["config", "page", "uri"]) == uri
+      with {:page, page} when not is_nil(page) <- {:page, Map.get(step, "page", nil)} do
+        segments = [Map.get(step, "sequence"), Map.get(page, "slug")]
+        step_uri = "/" <> Enum.join(segments, "/")
+        step_uri == uri
+      else
+        {:page, nil} -> false
+      end
     end)
     |> List.first(nil)
   end
@@ -39,15 +45,15 @@ defmodule River.WorkflowEngine.Steps do
     impl.run(step, event, workflow_session)
   end
 
-  def get_impl_for_key("system/steps/show_page/" <> _id),
+  def get_impl_for_key("river/steps/show_page/" <> _id),
     do: Application.get_env(:river, :show_page)
 
-  def get_impl_for_key("system/steps/process_form/" <> _id),
+  def get_impl_for_key("river/steps/process_form/" <> _id),
     do: Application.get_env(:river, :process_form)
 
-  def get_impl_for_key("system/steps/redirect/" <> _id),
+  def get_impl_for_key("river/steps/redirect/" <> _id),
     do: Application.get_env(:river, :redirect)
 
-  def get_impl_for_key("system/steps/stop/" <> _id),
+  def get_impl_for_key("river/steps/stop/" <> _id),
     do: Application.get_env(:river, :stop)
 end

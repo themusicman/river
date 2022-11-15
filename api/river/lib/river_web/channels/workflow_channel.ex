@@ -3,7 +3,7 @@ defmodule RiverWeb.WorkflowChannel do
 
   alias River.Repo
   alias River.WorkflowEngine.Steps
-  alias River.WorkflowEngine.Steps.ShowPage
+  alias River.Steps.ShowPage
 
   @impl true
   def join("workflow:" <> workflow_session_id, payload, socket) do
@@ -42,7 +42,7 @@ defmodule RiverWeb.WorkflowChannel do
     step = Steps.find_step_with_uri(workflow_session.workflow, event["uri"])
 
     if step do
-      [ShowPage.build_ui_command(get_in(step, ["config", "page"]))]
+      [ShowPage.build_ui_command(step)]
       |> River.WorkflowEngine.execute_commands(workflow_session)
     end
 

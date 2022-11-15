@@ -1,8 +1,8 @@
-defmodule River.WorkflowEngine.Steps.Redirect.Test do
+defmodule River.Steps.Redirect.Test do
   use River.DataCase
 
   import River.Factory
-  alias River.WorkflowEngine.Steps.Redirect
+  alias River.Steps.Redirect
   alias River.WorkflowEngine.Commands.UICommand
 
   describe "run/2" do
@@ -11,7 +11,7 @@ defmodule River.WorkflowEngine.Steps.Redirect.Test do
 
       step = %{
         "label" => "Redirect",
-        "key" => "system/steps/redirect/1",
+        "key" => "river/steps/redirect/1",
         "on" => "events/222",
         "config" => %{"url" => "https://www.google.com"}
       }
@@ -28,7 +28,7 @@ defmodule River.WorkflowEngine.Steps.Redirect.Test do
     } do
       assert Redirect.run(step, event, workflow_session) == [
                %UICommand{
-                 kind: "system/ui/redirect",
+                 kind: "river/ui/redirect",
                  data: %{"url" => "https://www.google.com"}
                }
              ]

@@ -1,8 +1,8 @@
-defmodule River.WorkflowEngine.Steps.ShowPage.Test do
+defmodule River.Steps.ShowPage.Test do
   use River.DataCase
 
   import River.Factory
-  alias River.WorkflowEngine.Steps.ShowPage
+  alias River.Steps.ShowPage
   alias River.WorkflowEngine.Commands.UICommand
 
   describe "run/2" do
@@ -11,9 +11,12 @@ defmodule River.WorkflowEngine.Steps.ShowPage.Test do
 
       step = %{
         "label" => "Show Page",
-        "key" => "system/steps/show_page/1",
+        "sequence" => "start",
+        "position" => 1,
+        "page" => %{"slug" => "page-1", "form" => %{"emits" => "events/333"}},
+        "key" => "river/steps/show_page/1",
         "on" => "events/222",
-        "config" => %{"page" => %{"uri" => "/page-1", "form" => %{"emits" => "events/333"}}}
+        "config" => %{}
       }
 
       event = %{"key" => "events/222"}
@@ -28,8 +31,12 @@ defmodule River.WorkflowEngine.Steps.ShowPage.Test do
     } do
       assert ShowPage.run(step, event, workflow_session) == [
                %UICommand{
-                 kind: "system/pages/show",
-                 data: %{"page" => %{"form" => %{"emits" => "events/333"}, "uri" => "/page-1"}}
+                 kind: "river/pages/show",
+                 data: %{
+                   "sequence" => "start",
+                   "position" => 1,
+                   "page" => %{"form" => %{"emits" => "events/333"}, "slug" => "page-1"}
+                 }
                }
              ]
     end
@@ -41,8 +48,12 @@ defmodule River.WorkflowEngine.Steps.ShowPage.Test do
     } do
       assert ShowPage.run(step, event, workflow_session) == [
                %UICommand{
-                 kind: "system/pages/show",
-                 data: %{"page" => %{"form" => %{"emits" => "events/333"}, "uri" => "/page-1"}}
+                 kind: "river/pages/show",
+                 data: %{
+                   "sequence" => "start",
+                   "position" => 1,
+                   "page" => %{"form" => %{"emits" => "events/333"}, "slug" => "page-1"}
+                 }
                }
              ]
     end

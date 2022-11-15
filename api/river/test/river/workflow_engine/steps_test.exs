@@ -16,25 +16,26 @@ defmodule River.WorkflowEngine.Steps.Test do
 
   describe "find_step_with_uri/2" do
     test "returns the step that has a uri", %{workflow: workflow} do
-      uri = "/form"
+      uri = "/onboarding/demographics"
 
       assert Steps.find_step_with_uri(workflow, uri) == %{
-               "config" => %{
-                 "page" => %{
-                   "description" => "This is my form",
-                   "form" => %{"emits" => "events/456", "schema" => %{}},
-                   "title" => "My Form",
-                   "uri" => "/form"
-                 }
+               "page" => %{
+                 "description" => "Please provide your demographics",
+                 "form" => %{"emits" => "events/456", "schema" => %{}},
+                 "title" => "Demographics",
+                 "slug" => "demographics"
                },
-               "key" => "system/steps/show_page/1",
-               "label" => "Present Form",
+               "config" => %{},
+               "key" => "river/steps/show_page/1",
+               "label" => "Collect Demographics for Onboarding",
+               "sequence" => "onboarding",
+               "position" => 1,
                "on" => "events/123"
              }
     end
 
     test "returns nil if there is no step with that uri", %{workflow: workflow} do
-      uri = "/form1"
+      uri = "form1"
 
       assert Steps.find_step_with_uri(workflow, uri) == nil
     end
@@ -51,7 +52,7 @@ defmodule River.WorkflowEngine.Steps.Test do
     test "returns the event in the emits key" do
       step = %{
         "label" => "Process Form",
-        "key" => "system/steps/process_form/2",
+        "key" => "river/steps/process_form/2",
         "on" => "events/999",
         "config" => %{},
         "emits" => "events/777"
@@ -63,9 +64,9 @@ defmodule River.WorkflowEngine.Steps.Test do
     test "returns event for a form" do
       step = %{
         "label" => "Show Form",
-        "key" => "system/steps/show_page/1",
+        "key" => "river/steps/show_page/1",
         "on" => "events/222",
-        "config" => %{"page" => %{"uri" => "/form", "form" => %{"emits" => "events/333"}}}
+        "config" => %{"page" => %{"slug" => "form", "form" => %{"emits" => "events/333"}}}
       }
 
       assert Steps.event_from_step(step) == "events/333"
@@ -78,17 +79,24 @@ defmodule River.WorkflowEngine.Steps.Test do
     } do
       step = %{
         "label" => "Show Form",
-        "key" => "system/steps/show_page/1",
+        "key" => "river/steps/show_page/1",
+        "sequence" => "start",
+        "position" => 1,
+        "page" => %{"form" => %{"emits" => "events/333"}, "slug" => "form"},
         "on" => "events/222",
-        "config" => %{"page" => %{"form" => %{"emits" => "events/333"}, "uri" => "/form"}}
+        "config" => %{}
       }
 
       event = %{"key" => "events/222"}
 
       assert Steps.run(step, event, workflow_session) == [
                %UICommand{
-                 data: %{"page" => %{"form" => %{"emits" => "events/333"}, "uri" => "/form"}},
-                 kind: "system/pages/show"
+                 data: %{
+                   "sequence" => "start",
+                   "position" => 1,
+                   "page" => %{"form" => %{"emits" => "events/333"}, "slug" => "form"}
+                 },
+                 kind: "river/pages/show"
                }
              ]
     end
@@ -98,7 +106,7 @@ defmodule River.WorkflowEngine.Steps.Test do
     } do
       step = %{
         "label" => "Process Form",
-        "key" => "system/steps/process_form/2",
+        "key" => "river/steps/process_form/2",
         "on" => "events/222",
         "config" => %{},
         "emits" => "events/333"
@@ -118,7 +126,7 @@ defmodule River.WorkflowEngine.Steps.Test do
 
       step = %{
         "label" => "Redirect",
-        "key" => "system/steps/redirect/1",
+        "key" => "river/steps/redirect/1",
         "on" => "events/222",
         "config" => %{"url" => url}
       }
@@ -128,7 +136,7 @@ defmodule River.WorkflowEngine.Steps.Test do
       assert Steps.run(step, event, workflow_session) == [
                %UICommand{
                  data: %{"url" => "https://example.com"},
-                 kind: "system/ui/redirect"
+                 kind: "river/ui/redirect"
                }
              ]
     end

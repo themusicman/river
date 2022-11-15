@@ -55,10 +55,10 @@ config :river, :jwt_secret, "TkPl4CbRRoHiyVWUN9T8WU3Ymbu39aNpsH3OWi/rxYQoSh06OuE
 
 # Mocks
 config :river, :jwt, RiverWeb.JWT.Token
-config :river, :show_page, River.WorkflowEngine.Steps.ShowPage
-config :river, :process_form, River.WorkflowEngine.Steps.ProcessForm
-config :river, :redirect, River.WorkflowEngine.Steps.Redirect
-config :river, :stop, River.WorkflowEngine.Steps.Stop
+config :river, :show_page, River.Steps.ShowPage
+config :river, :process_form, River.Steps.ProcessForm
+config :river, :redirect, River.Steps.Redirect
+config :river, :stop, River.Steps.Stop
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

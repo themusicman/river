@@ -35,29 +35,33 @@ defmodule RiverWeb.WorkflowChannelTest do
       assert_broadcast "command",
                        %UICommand{
                          data: %{
+                           "sequence" => "onboarding",
+                           "position" => 1,
                            "page" => %{
-                             "uri" => "/form",
+                             "slug" => "demographics",
                              "form" => %{"emits" => "events/456", "schema" => %{}}
                            }
                          },
-                         kind: "system/pages/show"
+                         kind: "river/pages/show"
                        }
     end
 
     test "request page configuration for uri", %{socket: socket} do
-      event = %{"uri" => "/form"}
+      event = %{"uri" => "/onboarding/demographics"}
       ref = push(socket, "request_page", event)
       assert_reply ref, :ok, %{"success" => true}
 
       assert_broadcast "command",
                        %UICommand{
                          data: %{
+                           "sequence" => "onboarding",
+                           "position" => 1,
                            "page" => %{
-                             "uri" => "/form",
+                             "slug" => "demographics",
                              "form" => %{"emits" => "events/456", "schema" => %{}}
                            }
                          },
-                         kind: "system/pages/show"
+                         kind: "river/pages/show"
                        }
     end
   end

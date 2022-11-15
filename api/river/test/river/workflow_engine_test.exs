@@ -12,27 +12,28 @@ defmodule River.WorkflowEngine.Test do
         "steps" => [
           %{
             "label" => "Present Form",
-            "key" => "system/steps/show_page/1",
+            "key" => "river/steps/show_page/1",
             "on" => "events/123",
-            "config" => %{
-              "page" => %{
-                "uri" => "/form",
-                "form" => %{
-                  "emits" => "events/456",
-                  "schema" => %{}
-                }
+            "sequence" => "onboarding",
+            "position" => 1,
+            "page" => %{
+              "slug" => "form",
+              "form" => %{
+                "emits" => "events/456",
+                "schema" => %{}
               }
-            }
+            },
+            "config" => %{}
           },
           %{
             "label" => "Stop",
-            "key" => "system/steps/stop/2",
+            "key" => "river/steps/stop/2",
             "on" => "events/123",
             "config" => %{}
           },
           %{
             "label" => "Process Form",
-            "key" => "system/steps/process_form/3",
+            "key" => "river/steps/process_form/3",
             "on" => "events/456",
             "config" => %{},
             "emits" => "events/789"
@@ -55,12 +56,14 @@ defmodule River.WorkflowEngine.Test do
       assert WorkflowEngine.handle_event(workflow, event, workflow_session) == [
                %UICommand{
                  data: %{
+                   "sequence" => "onboarding",
+                   "position" => 1,
                    "page" => %{
-                     "uri" => "/form",
+                     "slug" => "form",
                      "form" => %{"emits" => "events/456", "schema" => %{}}
                    }
                  },
-                 kind: "system/pages/show"
+                 kind: "river/pages/show"
                },
                %StopCommand{event: %{"key" => "events/123"}}
              ]

@@ -1,4 +1,4 @@
-defmodule River.WorkflowEngine.Steps.SendSms do
+defmodule River.Steps.SendSms do
   @behaviour River.WorkflowEngine.Step
 
   @impl River.WorkflowEngine.Step
